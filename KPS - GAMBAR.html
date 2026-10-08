@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akademi SMART KPS SPM 2026 - 15 Misi Bergambar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --purple-main: #6C5CE7;
+            --purple-dark: #4834D4;
+            --teal-bright: #00CEC9;
+            --pink-accent: #FF7675;
+            --yellow-star: #FDCB6E;
+            --green-correct: #2ECC71;
+            --red-wrong: #FF5252;
+            --card-bg: #FFFFFF;
+            --text-dark: #2D3436;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            color: var(--text-dark);
+        }
+
+        .main-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 850px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            overflow-y: auto;
+            max-height: 94vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Top Bar Header */
+        .app-header {
+            background: var(--purple-dark);
+            color: white;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            border-bottom: 4px solid var(--pink-accent);
+        }
+
+        .header-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.1rem;
+            color: var(--yellow-star);
+        }
+
+        .user-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .score-pill {
+            background: var(--yellow-star);
+            color: var(--text-dark);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 100%;
+            background: #DFE6E9;
+            height: 10px;
+            position: sticky;
+            top: 58px;
+            z-index: 19;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--teal-bright), var(--yellow-star));
+            transition: width 0.4s ease;
+        }
+
+        /* Screen Wrapper */
+        .screen {
+            display: none;
+            padding: 24px;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Login Screen */
+        .login-box {
+            text-align: center;
+            padding: 25px 10px;
+            max-width: 480px;
+            margin: auto;
+        }
+
+        .login-box h1 {
+            font-family: 'Fredoka', cursive;
+            color: var(--purple-dark);
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+
+        .login-box p {
+            color: #636E72;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 14px;
+            border: 3px solid #B2BEC3;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            outline: none;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .login-box input:focus {
+            border-color: var(--teal-bright);
+            box-shadow: 0 0 12px rgba(0,206,201,0.4);
+        }
+
+        /* General Button */
+        .btn {
+            background: var(--teal-bright);
+            color: white;
+            border: none;
+            padding: 12px 26px;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 5px 12px rgba(0,206,201,0.4);
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0,206,201,0.6);
+        }
+
+        .btn-accent {
+            background: var(--pink-accent);
+            box-shadow: 0 5px 12px rgba(255,118,117,0.4);
+        }
+
+        .btn-accent:hover {
+            box-shadow: 0 8px 18px rgba(255,118,117,0.6);
+        }
+
+        /* Mission Header */
+        .mission-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .mission-tag {
+            background: var(--purple-dark);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .kps-skill-badge {
+            background: var(--pink-accent);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 800;
+        }
+
+        .mission-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.25rem;
+            color: var(--purple-dark);
+            margin-top: 4px;
+        }
+
+        .scenario-box {
+            background: #F0F3F8;
+            border-left: 6px solid var(--purple-main);
+            padding: 14px;
+            border-radius: 12px;
+            margin: 12px 0;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        /* Image / SVG Container */
+        .diagram-card {
+            background: #FFFFFF;
+            border: 2px solid #CBD5E1;
+            border-radius: 16px;
+            padding: 12px;
+            margin: 12px 0;
+            text-align: center;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .diagram-card svg {
+            max-width: 100%;
+            height: auto;
+            max-height: 220px;
+        }
+
+        /* Question & Options */
+        .q-title {
+            font-weight: 800;
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+            color: #2D3436;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background: #FFFFFF;
+            border: 2px solid #DFE6E9;
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-size: 0.98rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            color: var(--text-dark);
+        }
+
+        .option-btn:hover {
+            border-color: var(--teal-bright);
+            background: #E6FFFA;
+            transform: translateY(-2px);
+        }
+
+        .option-btn.correct {
+            background: var(--green-correct) !important;
+            color: white !important;
+            border-color: var(--green-correct) !important;
+        }
+
+        .option-btn.wrong {
+            background: var(--red-wrong) !important;
+            color: white !important;
+            border-color: var(--red-wrong) !important;
+        }
+
+        /* Footer Action */
+        .footer-action {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px dashed #DFE6E9;
+        }
+
+        /* Evaluation / Certificate */
+        .result-card {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFFFFF 100%);
+            border: 3px dashed var(--yellow-star);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .badge-icon {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+
+        .summary-box {
+            background: #EBF8FF;
+            border: 1px solid #BEE3F8;
+            padding: 16px;
+            border-radius: 14px;
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .summary-box h4 {
+            color: var(--purple-dark);
+            margin-bottom: 8px;
+            font-family: 'Fredoka', cursive;
+        }
+
+        .summary-box ul {
+            padding-left: 20px;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-card" id="mainCard">
+        <!-- Top Navigation Bar -->
+        <div class="app-header" id="appHeader" style="display: none;">
+            <div class="header-title">🧪 SMART KPS 2026</div>
+            <div class="user-badge" id="displayName">Ejen: -</div>
+            <div class="score-pill">⭐ Markah: <span id="displayScore">0</span> / 30</div>
+        </div>
+
+        <div class="progress-bar-container" id="progressContainer" style="display: none;">
+            <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+
+        <!-- 0. LOGIN SCREEN -->
+        <div class="screen active" id="screenLogin">
+            <div class="login-box">
+                <div style="font-size: 4.5rem; margin-bottom: 10px;">🧬</div>
+                <h1>AKADEMI SMART KPS</h1>
+                <p>15 Misi Kemahiran Proses Sains Bergambar (TP1 - TP3)</p>
+
+                <input type="text" id="inputName" placeholder="Masukkan Nama Anda..." autocomplete="off">
+                <br>
+                <button class="btn btn-accent" onclick="startApp()">Sertai Misi Bergambar 🚀</button>
+            </div>
+        </div>
+
+        <!-- DYNAMIC MISSION SCREEN -->
+        <div class="screen" id="screenMission">
+            <div class="mission-header">
+                <span class="mission-tag" id="missionTag">Misi 1 / 15</span>
+                <span class="kps-skill-badge" id="kpsSkillBadge">Kemahiran KPS</span>
+            </div>
+            <h2 class="mission-title" id="missionTitle">Tajuk Misi</h2>
+
+            <div class="scenario-box" id="scenarioText">Situasi Eksperimen...</div>
+
+            <!-- Rajah Eksperimen (SVG Graphic) -->
+            <div class="diagram-card" id="diagramCard">
+                <!-- SVG injected dynamically -->
+            </div>
+
+            <p class="q-title" id="qText">Soalan...</p>
+            <div class="options-container" id="optionsContainer"></div>
+
+            <div class="footer-action">
+                <button class="btn btn-accent" id="btnNextMission" style="display:none;" onclick="nextMission()">Misi Seterusnya ➡️</button>
+            </div>
+        </div>
+
+        <!-- EVALUATION SCREEN -->
+        <div class="screen" id="screenEvaluate">
+            <div class="mission-header">
+                <span class="mission-tag">Laporan Akhir</span>
+                <h2 class="mission-title">Keputusan Prestasi KPS SPM</h2>
+            </div>
+
+            <div class="result-card">
+                <div class="badge-icon" id="evalBadge">🏆</div>
+                <h2 id="evalStatusTitle" style="color: var(--purple-dark); margin-bottom: 6px;">Tahniah Ejen!</h2>
+                <p style="font-size: 1.3rem; font-weight: 800; color: #2D3436;" id="evalScoreDetail">Jumlah Markah: 0 / 30</p>
+                <p id="evalFeedbackText" style="margin-top: 10px; color: #636E72; font-weight: 700;"></p>
+            </div>
+
+            <div class="summary-box">
+                <h4>📌 Formulasi Kuasai KPS Melalui Gambar:</h4>
+                <ul>
+                    <li><strong>Pemboleh Ubah Dimanipulasi (PM):</strong> Perhatikan perbezaan pada radas/bahan di sebelah kiri dan kanan gambar[cite: 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30].</li>
+                    <li><strong>Pemboleh Ubah Bergerak Balas (PB):</strong> Lihat hasil/bacaan ukuran di akhir rajah[cite: 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30].</li>
+                    <li><strong>Pemerhatian:</strong> Nyatakan apa yang nampak jelas dalam gambar (cth: tompok perang, kedalaman lekukan, masa)[cite: 8, 10, 12, 16, 18, 24, 26].</li>
+                    <li><strong>Inferens:</strong> Alasan / sebab sains di sebalik gambar tersebut[cite: 8, 16, 28].</li>
+                </ul>
+            </div>
+
+            <div class="footer-action">
+                <button class="btn btn-accent" onclick="location.reload()">Mula Semula 15 Misi 🔄</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let studentName = "";
+        let totalScore = 0;
+        let currentMissionIndex = 0;
+
+        // Visual SVGs and Questions corresponding strictly to the PDF Module
+        const missionsData = [
+            /* 1. Denyutan Nadi */
+            {
+                title: "Eksperimen Kadar Denyutan Nadi",
+                skill: "PB (Bergerak Balas)",
+                scenario: "Amar dan Amira mengambil kadar denyutan nadi mereka dalam keadaan rehat dan selepas berlari selama 1 minit menggunakan jam randik.",
+                question: "Berdasarkan rajah, apakah Pemboleh Ubah Bergerak Balas (PB) - faktor yang diperhatikan/diukur?",
+                svg: `<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="120" rx="10" fill="#F8FAFC"/>
+                    <circle cx="80" cy="50" r="28" fill="#6C5CE7"/>
+                    <text x="80" y="55" font-size="22" text-anchor="middle" fill="white">🧘</text>
+                    <text x="80" y="95" font-size="12" font-weight="bold" text-anchor="middle" fill="#2D3436">Keadaan Rehat</text>
+                    
+                    <circle cx="200" cy="50" r="25" fill="#FFC75F" stroke="#E67E22" stroke-width="3"/>
+                    <text x="200" y="56" font-size="20" text-anchor="middle">⏱️</text>
+                    <text x="200" y="95" font-size="12" font-weight="bold" text-anchor="middle" fill="#2D3436">Masa 1 Minit</text>
+                    
+                    <circle cx="320" cy="50" r="28" fill="#FF7675"/>
+                    <text x="320" y="55" font-size="22" text-anchor="middle" fill="white">🏃</text>
+                    <text x="320" y="95" font-size="12" font-weight="bold" text-anchor="middle" fill="#2D3436">Selepas Berlari</text>
+                </svg>`,
+                options: [
+                    { text: "Aktiviti fizikal yang dijalankan", correct: false },
+                    { text: "Kadar denyutan nadi seminit", correct: true },
+                    { text: "Jenis jam randik yang digunakan", correct: false }
+                ]
+            },
+            /* 2. Tulang Berongga vs Padat (Soalan 2 Modul) */
+            {
+                title: "Eksperimen Tulang Berongga vs Padat",
+                skill: "PM (Dimanipulasi)",
+                scenario: "Satu eksperimen dijalankan untuk membandingkan kekuatan silinder berongga dan silinder padat bagi menyokong berat buku teks.",
+                question: "Rajah menunjukkan dua jenis susunan silinder. Apakah Pemboleh Ubah Dimanipulasi (PM)?",
+                svg: `<svg viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="130" rx="10" fill="#F1F5F9"/>
+                    <!-- Model A -->
+                    <rect x="30" y="20" width="130" height="15" fill="#E2E8F0" stroke="#475569" stroke-width="2"/>
+                    <text x="95" y="32" font-size="10" font-weight="bold" text-anchor="middle">Penutup Kotak</text>
+                    <line x1="50" y1="35" x2="50" y2="90" stroke="#94A3B8" stroke-width="12" stroke-dasharray="2 2"/>
+                    <line x1="140" y1="35" x2="140" y2="90" stroke="#94A3B8" stroke-width="12" stroke-dasharray="2 2"/>
+                    <text x="95" y="112" font-size="12" font-weight="bold" text-anchor="middle" fill="#00C9A7">Silinder Berongga</text>
+                    
+                    <!-- Model B -->
+                    <rect x="240" y="20" width="130" height="15" fill="#E2E8F0" stroke="#475569" stroke-width="2"/>
+                    <text x="305" y="32" font-size="10" font-weight="bold" text-anchor="middle">Penutup Kotak</text>
+                    <line x1="260" y1="35" x2="260" y2="90" stroke="#475569" stroke-width="12"/>
+                    <line x1="350" y1="35" x2="350" y2="90" stroke="#475569" stroke-width="12"/>
+                    <text x="305" y="112" font-size="12" font-weight="bold" text-anchor="middle" fill="#4834D4">Silinder Padat</text>
+                </svg>`,
+                options: [
+                    { text: "Jenis silinder (Silinder berongga dan silinder padat)", correct: true },
+                    { text: "Bilangan buku teks yang disokong", correct: false },
+                    { text: "Saiz dan ketinggian penutup kotak", correct: false }
+                ]
+            },
+            /* 3. Tulang Berongga (Hipotesis) */
+            {
+                title: "Kekuatan Rangka Dalam",
+                skill: "Hipotesis",
+                scenario: "Buku teks ditimbunkan satu per satu di atas penutup kotak yang disokong silinder berongga dan silinder padat.",
+                question: "Berdasarkan rajah sokongan struktur ini, apakah hipotesis yang boleh dibuat?",
+                svg: `<svg viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="130" rx="10" fill="#F8FAFC"/>
+                    <rect x="120" y="15" width="160" height="12" fill="#3B82F6" rx="3"/>
+                    <rect x="125" y="29" width="150" height="12" fill="#EF4444" rx="3"/>
+                    <rect x="130" y="43" width="140" height="12" fill="#10B981" rx="3"/>
+                    <text x="200" y="38" font-size="10" font-weight="bold" text-anchor="middle" fill="white">Buku Teks</text>
+                    
+                    <rect x="110" y="57" width="180" height="12" fill="#CBD5E1" stroke="#475569"/>
+                    <line x1="130" y1="69" x2="130" y2="110" stroke="#00C9A7" stroke-width="10" stroke-dasharray="2 2"/>
+                    <line x1="270" y1="69" x2="270" y2="110" stroke="#00C9A7" stroke-width="10" stroke-dasharray="2 2"/>
+                    <text x="200" y="90" font-size="11" font-weight="bold" text-anchor="middle" fill="#2D3436">Silinder Berongga (Menyokong lebih banyak buku)</text>
+                </svg>`,
+                options: [
+                    { text: "Silinder padat lebih tinggi berbanding silinder berongga.", correct: false },
+                    { text: "Ketinggian silinder dipengaruhi oleh saiz buku teks.", correct: false },
+                    { text: "Silinder berongga lebih kuat (boleh menyokong lebih banyak beban) berbanding silinder padat.", correct: true }
+                ]
+            },
+            /* 4. Kekerasan Aloi vs Logam Tulen (Soalan 3 Modul) */
+            {
+                title: "Kekerasan Aloi vs Logam Tulen",
+                skill: "Pemerhatian",
+                scenario: "Pemberat 1kg dijatuhkan ke atas bola keluli di atas bongkah kuprum dan bongkah gangsa dari ketinggian 50 cm.",
+                question: "Rajah menunjukkan susunan radas eksperimen. Apakah pemerhatian pada kedalaman lekukan di atas bongkah kuprum?",
+                svg: `<svg viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="130" rx="10" fill="#F1F5F9"/>
+                    <!-- Copper -->
+                    <rect x="60" y="90" width="100" height="25" fill="#E27D60" stroke="#C0392B" stroke-width="2"/>
+                    <text x="110" y="107" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Bongkah Kuprum</text>
+                    <circle cx="110" cy="85" r="7" fill="#95A5A6"/>
+                    <rect x="95" y="20" width="30" height="35" fill="#34495E" rx="3"/>
+                    <text x="110" y="42" font-size="10" fill="white" text-anchor="middle">1 kg</text>
+                    
+                    <!-- Bronze -->
+                    <rect x="240" y="90" width="100" height="25" fill="#D4AC0D" stroke="#B7950B" stroke-width="2"/>
+                    <text x="290" y="107" font-size="11" font-weight="bold" fill="white" text-anchor="middle">Bongkah Gangsa</text>
+                    <circle cx="290" cy="85" r="7" fill="#95A5A6"/>
+                    <rect x="275" y="20" width="30" height="35" fill="#34495E" rx="3"/>
+                    <text x="290" y="42" font-size="10" fill="white" text-anchor="middle">1 kg</text>
+                </svg>`,
+                options: [
+                    { text: "Kedalaman lekukan pada bongkah kuprum LEBIH DALAM berbanding bongkah gangsa.", correct: true },
+                    { text: "Bongkah kuprum tidak mengalami sebarang lekukan.", correct: false },
+                    { text: "Bongkah gangsa hancur apabila diketuk oleh pemberat.", correct: false }
+                ]
+            },
+            /* 5. Kekerasan Aloi (Inferens) */
+            {
+                title: "Inferens Kekerasan Metal",
+                skill: "Inferens",
+                scenario: "Selepas pemberat dijatuhkan, kedalaman lekukan pada bongkah kuprum diukur lebih dalam berbanding bongkah gangsa.",
+                question: "Apakah inferens (sebab saintifik) bagi pemerhatian pada rajah lekukan ini?",
+                svg: `<svg viewBox="0 0 400 110" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="110" rx="10" fill="#F8FAFC"/>
+                    <!-- Copper Dent -->
+                    <rect x="50" y="40" width="120" height="50" fill="#E27D60"/>
+                    <path d="M 95 40 Q 110 65 125 40 Z" fill="#F8FAFC"/>
+                    <text x="110" y="102" font-size="11" font-weight="bold" text-anchor="middle" fill="#C0392B">Kuprum (Lekukan Dalam)</text>
+                    
+                    <!-- Bronze Dent -->
+                    <rect x="230" y="40" width="120" height="50" fill="#D4AC0D"/>
+                    <path d="M 282 40 Q 290 48 298 40 Z" fill="#F8FAFC"/>
+                    <text x="290" y="102" font-size="11" font-weight="bold" text-anchor="middle" fill="#B7950B">Gangsa (Lekukan Dangkal)</text>
+                </svg>`,
+                options: [
+                    { text: "Bongkah kuprum lebih berat daripada bongkah gangsa.", correct: false },
+                    { text: "Gangsa adalah aloi yang LEBIH KERAS berbanding kuprum tulen.", correct: true },
+                    { text: "Bola keluli menjadi lembut semasa terkena bongkah gangsa.", correct: false }
+                ]
+            },
+            /* 6. Ketahanan Kakisan Paku (Soalan 4 Modul) */
+            {
+                title: "Ketahanan Kakisan Paku",
+                skill: "PMa (Dimalarkan)",
+                scenario: "Paku besi dan paku keluli direndam dalam tabung uji mengandungi isi padu air yang sama selama seminggu.",
+                question: "Lihat susunan radas ini. Apakah Pemboleh Ubah Dimalarkan (PMa) supaya ujian adil?",
+                svg: `<svg viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="130" rx="10" fill="#F1F5F9"/>
+                    <!-- Test Tube 1 -->
+                    <rect x="80" y="15" width="40" height="90" rx="20" fill="none" stroke="#64748B" stroke-width="3"/>
+                    <path d="M 82 50 L 118 50 L 118 85 A 18 18 0 0 1 82 85 Z" fill="#BAE6FD" opacity="0.6"/>
+                    <line x1="90" y1="35" x2="110" y2="90" stroke="#71717A" stroke-width="4"/>
+                    <circle cx="102" cy="65" r="3" fill="#D97706"/>
+                    <circle cx="106" cy="75" r="4" fill="#D97706"/>
+                    <text x="100" y="118" font-size="11" font-weight="bold" text-anchor="middle" fill="#DC2626">Paku Besi (Tompok Perang)</text>
+
+                    <!-- Test Tube 2 -->
+                    <rect x="280" y="15" width="40" height="90" rx="20" fill="none" stroke="#64748B" stroke-width="3"/>
+                    <path d="M 282 50 L 318 50 L 318 85 A 18 18 0 0 1 282 85 Z" fill="#BAE6FD" opacity="0.6"/>
+                    <line x1="290" y1="35" x2="310" y2="90" stroke="#3F3F46" stroke-width="4"/>
+                    <text x="300" y="118" font-size="11" font-weight="bold" text-anchor="middle" fill="#16A34A">Paku Keluli (Tiada Perubahan)</text>
+                </svg>`,
+                options: [
+                    { text: "Jenis paku yang digunakan", correct: false },
+                    { text: "Keadaan paku selepas seminggu", correct: false },
+                    { text: "Isi padu air dalam tabung uji / Saiz paku", correct: true }
+                ]
+            },
+            /* 7. Pengoksidaan Epal (Soalan 5 Modul) */
+            {
+                title: "Pengoksidaan Buah Epal",
+                skill: "Hipotesis",
+                scenario: "Hirisan epal A direndam dalam jus limau manakala hirisan epal B dibiarkan terdedah kepada udara.",
+                question: "Berdasarkan rajah perbandingan warna epal ini, apakah hipotesis yang paling tepat?",
+                svg: `<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="120" rx="10" fill="#F8FAFC"/>
+                    <!-- Apple A -->
+                    <path d="M 70 30 Q 100 10 130 30 Q 150 70 100 100 Q 50 70 70 30 Z" fill="#FEF08A" stroke="#CA8A04" stroke-width="2"/>
+                    <text x="100" y="112" font-size="11" font-weight="bold" text-anchor="middle" fill="#16A34A">Direndam Jus Limau (Kekal Segar)</text>
+                    
+                    <!-- Apple B -->
+                    <path d="M 270 30 Q 300 10 330 30 Q 350 70 300 100 Q 250 70 270 30 Z" fill="#D97706" stroke="#92400E" stroke-width="2"/>
+                    <text x="300" y="112" font-size="11" font-weight="bold" text-anchor="middle" fill="#DC2626">Terdedah Udara (Perang)</text>
+                </svg>`,
+                options: [
+                    { text: "Jus limau (antioksidan) melambatkan / mencegah pengoksidaan pada epal.", correct: true },
+                    { text: "Epal yang terdedah kepada udara bertukar menjadi masim.", correct: false },
+                    { text: "Jus limau menukarkan warna epal menjadi hijau pekat.", correct: false }
+                ]
+            },
+            /* 8. Jatuh Bebas (Soalan 6 Modul) */
+            {
+                title: "Eksperimen Jatuh Bebas",
+                skill: "PM (Dimanipulasi)",
+                scenario: "Cebisan kertas dilepaskan di dalam tiub silinder lut sinar yang mempunyai udara dan tiub silinder yang telah dipam vakum.",
+                question: "Rajah menunjukkan susunan tiub silinder dan pam vakum. Apakah Pemboleh Ubah Dimanipulasi (PM)?",
+                svg: `<svg viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="130" rx="10" fill="#F1F5F9"/>
+                    <!-- Cylinder Tube -->
+                    <rect x="60" y="15" width="30" height="95" rx="5" fill="#E2E8F0" stroke="#334155" stroke-width="2"/>
+                    <circle cx="75" cy="85" r="3" fill="#EF4444"/>
+                    <circle cx="78" cy="88" r="2" fill="#EF4444"/>
+                    <text x="75" y="122" font-size="10" font-weight="bold" text-anchor="middle">Tiub Silinder</text>
+                    
+                    <!-- Hose & Vacuum Pump -->
+                    <path d="M 90 25 Q 160 10 180 50" fill="none" stroke="#475569" stroke-width="6"/>
+                    <rect x="180" y="45" width="70" height="50" fill="#94A3B8" rx="5" stroke="#334155" stroke-width="2"/>
+                    <circle cx="215" cy="70" r="12" fill="#3B82F6"/>
+                    <text x="215" y="112" font-size="11" font-weight="bold" text-anchor="middle" fill="#1E3A8A">Pam Vakum</text>
+                </svg>`,
+                options: [
+                    { text: "Masa yang diambil untuk kertas sampai ke dasar", correct: false },
+                    { text: "Kehadiran udara (Tiub vakum vs Tiub ada udara)", correct: true },
+                    { text: "Ketinggian tiub silinder lut sinar", correct: false }
+                ]
+            },
+            /* 9. Inersia & Jisim (Soalan 7 Modul) */
+            {
+                title: "Inersia & Jisim Plastisin",
+                skill: "Pemerhatian",
+                scenario: "Bilah gergaji diapit pada meja dengan pengapit-G. Plastisin 30g dan plastisin 70g disesar dan dilepaskan untuk berayun.",
+                question: "Berdasarkan rajah ayunan plastisin ini, apakah pemerhatian bagi tempoh ayunan plastisin 70g?",
+                svg: `<svg viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="130" rx="10" fill="#F8FAFC"/>
+                    <!-- Table -->
+                    <rect x="20" y="50" width="100" height="60" fill="#CBD5E1" stroke="#475569" stroke-width="2"/>
+                    <rect x="110" y="52" width="20" height="30" fill="#334155"/>
+                    <text x="70" y="80" font-size="10" font-weight="bold" text-anchor="middle">Meja & Pengapit-G</text>
+
+                    <!-- Saw blade & Plastisin 30g -->
+                    <line x1="120" y1="60" x2="230" y2="60" stroke="#94A3B8" stroke-width="5"/>
+                    <circle cx="230" cy="60" r="10" fill="#EC4899"/>
+                    <text x="230" y="85" font-size="10" font-weight="bold" text-anchor="middle">Plastisin 30g</text>
+
+                    <!-- Saw blade & Plastisin 70g -->
+                    <line x1="120" y1="60" x2="340" y2="60" stroke="#94A3B8" stroke-width="5"/>
+                    <circle cx="340" cy="60" r="18" fill="#D97706"/>
+                    <text x="340" y="93" font-size="10" font-weight="bold" text-anchor="middle">Plastisin 70g</text>
+                </svg>`,
+                options: [
+                    { text: "Plastisin 70g mengambil masa LEBIH LAMA untuk berhenti berayun.", correct: true },
+                    { text: "Plastisin 70g berhenti berayun secara serta-merta.", correct: false },
+                    { text: "Bilah gergaji patah apabila diletakkan plastisin 70g.", correct: false }
+                ]
+            },
+            /* 10. Inersia & Jisim (Inferens) */
+            {
+                title: "Inferens Inersia Buaian",
+                skill: "Inferens",
+                scenario: "Abang yang mempunyai jisim badan besar sukar digerakkan dan mengambil masa lama untuk berhenti berayun berbanding adiknya.",
+                question: "Apakah inferens (sebab sains) bagi situasi yang ditunjukkan dalam rajah buaian ini?",
+                svg: `<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="120" rx="10" fill="#F1F5F9"/>
+                    <circle cx="120" cy="50" r="28" fill="#3B82F6"/>
+                    <text x="120" y="56" font-size="22" text-anchor="middle" fill="white">👨‍💼</text>
+                    <text x="120" y="98" font-size="11" font-weight="bold" text-anchor="middle" fill="#1E3A8A">Abang (Jisim Besar - Inersia Besar)</text>
+                    
+                    <circle cx="280" cy="50" r="20" fill="#10B981"/>
+                    <text x="280" y="55" font-size="18" text-anchor="middle" fill="white">👦</text>
+                    <text x="280" y="98" font-size="11" font-weight="bold" text-anchor="middle" fill="#065F46">Adik (Jisim Kecil - Inersia Kecil)</text>
+                </svg>`,
+                options: [
+                    { text: "Kerana abang duduk di buaian yang lebih tinggi.", correct: false },
+                    { text: "Kerana rantai buaian adik lebih panjang.", correct: false },
+                    { text: "Kerana semakin besar jisim objek, semakin BESAR INERSIA objek tersebut.", correct: true }
+                ]
+            },
+            /* 11. Pertumbuhan Bakteria (Soalan 8 Modul) */
+            {
+                title: "Pertumbuhan Bakteria (Cahaya)",
+                skill: "PB (Bergerak Balas)",
+                scenario: "Dua piring petri E dan F diletakkan di tempat gelap (almari) dan tempat cerah selepas diinokulasi kultur bakteria Bacillus sp.",
+                question: "Rajah menunjukkan keadaan piring petri E dan F selepas 3 hari. Apakah Pemboleh Ubah Bergerak Balas (PB)?",
+                svg: `<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="120" rx="10" fill="#F8FAFC"/>
+                    <!-- Petri E -->
+                    <ellipse cx="100" cy="55" rx="45" ry="25" fill="#E2E8F0" stroke="#475569" stroke-width="2"/>
+                    <circle cx="80" cy="50" r="4" fill="#1E293B"/><circle cx="95" cy="60" r="5" fill="#1E293B"/><circle cx="115" cy="48" r="4" fill="#1E293B"/>
+                    <text x="100" y="100" font-size="11" font-weight="bold" text-anchor="middle" fill="#1E293B">Piring E (Almari Gelap - Banyak Tompok)</text>
+
+                    <!-- Petri F -->
+                    <ellipse cx="300" cy="55" rx="45" ry="25" fill="#FEF3C7" stroke="#D97706" stroke-width="2"/>
+                    <circle cx="300" cy="55" r="3" fill="#D97706"/>
+                    <text x="300" y="100" font-size="11" font-weight="bold" text-anchor="middle" fill="#D97706">Piring F (Kawasan Cerah - Sedikit Tompok)</text>
+                </svg>`,
+                options: [
+                    { text: "Tempat piring petri diletakkan", correct: false },
+                    { text: "Bilangan koloni bakteria / pertambahan tompok hitam", correct: true },
+                    { text: "Jenis agar-agar nutrien", correct: false }
+                ]
+            },
+            /* 12. Kesan Antibiotik (Soalan 9 Modul) */
+            {
+                title: "Kesan Antibiotik Terhadap Bakteria",
+                skill: "Hipotesis",
+                scenario: "Ceper kertas turas direndam air suling (Piring A) dan larutan penisilin (Piring B) diletakkan di atas agar nutrien berbakteria.",
+                question: "Berdasarkan rajah tindakan antibiotik ini, apakah hipotesis yang sesuai?",
+                svg: `<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="120" rx="10" fill="#F1F5F9"/>
+                    <!-- Petri A -->
+                    <circle cx="100" cy="55" r="35" fill="#FED7AA" stroke="#EA580C" stroke-width="2"/>
+                    <circle cx="100" cy="55" r="10" fill="#E2E8F0" stroke="#475569"/>
+                    <text x="100" y="105" font-size="11" font-weight="bold" text-anchor="middle" fill="#C2410C">Piring A (Ceper Air Suling)</text>
+
+                    <!-- Petri B -->
+                    <circle cx="300" cy="55" r="35" fill="#FED7AA" stroke="#EA580C" stroke-width="2"/>
+                    <circle cx="300" cy="55" r="22" fill="#E0F2FE" opacity="0.8"/> <!-- Clear zone -->
+                    <circle cx="300" cy="55" r="10" fill="#E2E8F0" stroke="#475569"/>
+                    <text x="300" y="105" font-size="11" font-weight="bold" text-anchor="middle" fill="#0284C7">Piring B (Penisilin - Kawasan Jernih)</text>
+                </svg>`,
+                options: [
+                    { text: "Air suling membunuh lebih banyak bakteria berbanding penisilin.", correct: false },
+                    { text: "Penisilin (antibiotik) merencat pertumbuhan bakteria (menghasilkan kawasan jernih).", correct: true },
+                    { text: "Kehadiran bakteria membesarkan saiz ceper kertas turas.", correct: false }
+                ]
+            },
+            /* 13. Pencemaran Air (Soalan 11 Modul) */
+            {
+                title: "Pencemaran Air & Metilena Biru",
+                skill: "Pemerhatian",
+                scenario: "1 cm³ larutan metilena biru disuntik ke dalam 200 cm³ sampel air paip (Botol A) dan air sungai (Botol B).",
+                question: "Lihat botol reagen ini. Apakah pemerhatian pada warna larutan metilena biru dalam air sungai?",
+                svg: `<svg viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="130" rx="10" fill="#F8FAFC"/>
+                    <!-- Bottle A -->
+                    <rect x="70" y="30" width="50" height="70" rx="8" fill="#BAE6FD" stroke="#0284C7" stroke-width="2"/>
+                    <text x="95" y="115" font-size="11" font-weight="bold" text-anchor="middle" fill="#0369A1">Botol A (Air Paip - Kekal Biru)</text>
+
+                    <!-- Bottle B -->
+                    <rect x="270" y="30" width="50" height="70" rx="8" fill="#FEF3C7" stroke="#D97706" stroke-width="2"/>
+                    <text x="295" y="115" font-size="11" font-weight="bold" text-anchor="middle" fill="#B45309">Botol B (Air Sungai - Warna Luntur)</text>
+                </svg>`,
+                options: [
+                    { text: "Warna larutan metilena biru LUNTUR LEBIH CEPAT dalam sampel air sungai.", correct: true },
+                    { text: "Warna larutan metilena biru bertukar menjadi merah tua.", correct: false },
+                    { text: "Tiada sebarang perubahan warna berlaku pada sampel air sungai.", correct: false }
+                ]
+            },
+            /* 14. Kesan Suhu Terhadap Kadar Tindak Balas (Soalan 12 Modul) */
+            {
+                title: "Kesan Suhu Kadar Tindak Balas",
+                skill: "PM (Dimanipulasi)",
+                scenario: "Campuran Natrium Tiosulfat dan Asid Sulfurik diuji di atas kertas bertanda 'X' pada suhu 30°C dan 50°C.",
+                question: "Rajah menunjukkan kelalang kon di atas tanda 'X'. Apakah Pemboleh Ubah Dimanipulasi (PM)?",
+                svg: `<svg viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="130" rx="10" fill="#F1F5F9"/>
+                    <!-- Flask & X -->
+                    <rect x="130" y="95" width="140" height="8" fill="#CBD5E1"/>
+                    <text x="200" y="103" font-size="16" font-weight="900" fill="#DC2626" text-anchor="middle">X</text>
+
+                    <path d="M 180 30 L 220 30 L 245 85 L 155 85 Z" fill="#E0F2FE" stroke="#0284C7" stroke-width="2" opacity="0.8"/>
+                    <line x1="200" y1="15" x2="200" y2="70" stroke="#EF4444" stroke-width="3"/> <!-- Thermometer -->
+                    
+                    <text x="200" y="122" font-size="11" font-weight="bold" text-anchor="middle" fill="#1E293B">Suhu Larutan Dipanaskan (30°C vs 50°C)</text>
+                </svg>`,
+                options: [
+                    { text: "Masa untuk tanda 'X' hilang dari pandangan", correct: false },
+                    { text: "Kepekatan asid sulfurik yang digunakan", correct: false },
+                    { text: "Suhu larutan (30°C dan 50°C)", correct: true }
+                ]
+            },
+            /* 15. Elektrolisis Kepekatan Elektrolit (Soalan 13 Modul) */
+            {
+                title: "Elektrolisis Kepekatan Elektrolit",
+                skill: "Inferens",
+                scenario: "Elektrolisis 1.0 mol dm⁻³ Asid Hidroklorik pekat menghasilkan gas klorin berbau sengit di anod.",
+                question: "Rajah menunjukkan sel elektrolitik. Apakah inferens bagi gas klorin yang dibebaskan di anod?",
+                svg: `<svg viewBox="0 0 400 130" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="130" rx="10" fill="#F8FAFC"/>
+                    <rect x="140" y="40" width="120" height="60" fill="#E0F2FE" stroke="#0284C7" stroke-width="2"/>
+                    <line x1="170" y1="30" x2="170" y2="85" stroke="#1E293B" stroke-width="6"/> <!-- Anode -->
+                    <line x1="230" y1="30" x2="230" y2="85" stroke="#1E293B" stroke-width="6"/> <!-- Cathode -->
+                    <circle cx="170" cy="25" r="4" fill="#FACC15"/><circle cx="166" cy="18" r="3" fill="#FACC15"/> <!-- Gas -->
+                    
+                    <text x="200" y="118" font-size="11" font-weight="bold" text-anchor="middle" fill="#0369A1">1.0 mol dm⁻³ Asid Hidroklorik (Pekat)</text>
+                </svg>`,
+                options: [
+                    { text: "Kepekatan ion klorida yang tinggi menyebabkan ion klorida dipilih untuk dinyahcas di anod.", correct: true },
+                    { text: "Ammeter mengalami kerosakan semasa asid pekat digunakan.", correct: false },
+                    { text: "Elektrod karbon bertukar menjadi tembaga tulen.", correct: false }
+                ]
+            }
+        ];
+
+        function scrollToBottom() {
+            const card = document.getElementById('mainCard');
+            setTimeout(() => {
+                card.scrollTop = card.scrollHeight;
+            }, 100);
+        }
+
+        function startApp() {
+            const nameInput = document.getElementById('inputName').value.trim();
+            if (!nameInput) {
+                alert("Sila masukkan nama anda untuk memulakan misi!");
+                return;
+            }
+            studentName = nameInput;
+            document.getElementById('displayName').innerText = `Ejen: ${studentName}`;
+            document.getElementById('appHeader').style.display = 'flex';
+            document.getElementById('progressContainer').style.display = 'block';
+
+            currentMissionIndex = 0;
+            totalScore = 0;
+            document.getElementById('displayScore').innerText = totalScore;
+
+            showScreen('screenMission');
+            loadMission();
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            document.getElementById('mainCard').scrollTop = 0;
+        }
+
+        function updateProgress() {
+            const pct = ((currentMissionIndex) / missionsData.length) * 100;
+            document.getElementById('progressBar').style.width = pct + '%';
+        }
+
+        function loadMission() {
+            updateProgress();
+            const current = missionsData[currentMissionIndex];
+
+            document.getElementById('missionTag').innerText = `Misi ${currentMissionIndex + 1} / ${missionsData.length}`;
+            document.getElementById('kpsSkillBadge').innerText = current.skill;
+            document.getElementById('missionTitle').innerText = current.title;
+            document.getElementById('scenarioText').innerHTML = `<strong>📖 Situasi:</strong> ${current.scenario}`;
+            document.getElementById('diagramCard').innerHTML = current.svg;
+            document.getElementById('qText').innerText = current.question;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            container.dataset.answered = "false";
+
+            const btnNext = document.getElementById('btnNextMission');
+            btnNext.style.display = 'none';
+
+            current.options.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt.text;
+                btn.onclick = function() {
+                    if (container.dataset.answered === "true") return;
+                    container.dataset.answered = "true";
+
+                    if (opt.correct) {
+                        btn.classList.add('correct');
+                        totalScore += 2; // 2 markah setiap soalan
+                        document.getElementById('displayScore').innerText = totalScore;
+                    } else {
+                        btn.classList.add('wrong');
+                    }
+
+                    btnNext.style.display = 'inline-block';
+                    scrollToBottom();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function nextMission() {
+            currentMissionIndex++;
+            if (currentMissionIndex < missionsData.length) {
+                loadMission();
+                document.getElementById('mainCard').scrollTop = 0;
+            } else {
+                finishAllMissions();
+            }
+        }
+
+        function finishAllMissions() {
+            document.getElementById('progressBar').style.width = '100%';
+            showScreen('screenEvaluate');
+
+            document.getElementById('evalScoreDetail').innerText = `Jumlah Markah KPS: ${totalScore} / 30 Markah`;
+
+            const badge = document.getElementById('evalBadge');
+            const title = document.getElementById('evalStatusTitle');
+            const feedback = document.getElementById('evalFeedbackText');
+
+            if (totalScore >= 24) {
+                badge.innerText = "🥇";
+                title.innerText = "TAHNIAH! TAHAP KPS EMAS (TP3)";
+                feedback.innerText = `Syabas Ejen ${studentName}! Anda telah menguasai kemahiran melihat rajah, Pemboleh Ubah, Hipotesis, Pemerhatian, dan Inferens dengan cemerlang!`;
+            } else if (totalScore >= 14) {
+                badge.innerText = "🥈";
+                title.innerText = "SYABAS! TAHAP KPS PERAK (TP2)";
+                feedback.innerText = `Bagus Ejen ${studentName}! Anda sudah semakin faham mengitlak rajah eksperimen. Teruskan latihan untuk capai 30/30!`;
+            } else {
+                badge.innerText = "🥉";
+                title.innerText = "USAHA LAGI! TAHAP KPS GANGSA (TP1)";
+                feedback.innerText = `Teruskan usaha Ejen ${studentName}! Ulang semula latihan 15 misi bergambar ini untuk lebih mahir mengenalpasti susunan radas.`;
+            }
+        }
+    </script>
+</body>
+</html>
